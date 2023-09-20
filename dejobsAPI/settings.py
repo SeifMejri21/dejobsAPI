@@ -84,22 +84,22 @@ PROD_DB_HOST = config('PROD_DB_HOST')
 PROD_DB_PORT = config('PROD_DB_PORT')
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': config('PROD_DB_NAME'),
-    #     'USER': config('PROD_DB_USER'),
-    #     'PASSWORD': config('PROD_DB_PASSWORD'),
-    #     'HOST': config('PROD_DB_HOST'),
-    #     'PORT': config('PROD_DB_PORT'),
-    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('LOCAL_DB_NAME'),
-        'USER': config('LOCAL_DB_USER'),
-        'PASSWORD': config('LOCAL_DB_PASSWORD'),
-        'HOST': config('LOCAL_DB_HOST'),
-        'PORT': config('LOCAL_DB_PORT'),
+        'NAME': config('PROD_DB_NAME'),
+        'USER': config('PROD_DB_USER'),
+        'PASSWORD': config('PROD_DB_PASSWORD'),
+        'HOST': config('PROD_DB_HOST'),
+        'PORT': config('PROD_DB_PORT'),
     },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': config('LOCAL_DB_NAME'),
+    #     'USER': config('LOCAL_DB_USER'),
+    #     'PASSWORD': config('LOCAL_DB_PASSWORD'),
+    #     'HOST': config('LOCAL_DB_HOST'),
+    #     'PORT': config('LOCAL_DB_PORT'),
+    # },
 
 }
 
