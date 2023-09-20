@@ -74,17 +74,18 @@ print(
 print(
     "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////")
 companies_list = dat.import_companies_list()
+pprint(companies_list[:5])
 print("len(companies_list): ", len(companies_list))
 
 from time import sleep
 
-i = 0
-for f in firms_info:
-    dat.export_single_company(f)
-    # companies_list = dat.import_companies_list()
-    i += 1
-    print(f"number companies exported {i}, number of companies in db: {len(companies_list)}")
-    # sleep(1)
+# i = 0
+# for f in firms_info:
+#     dat.export_single_company(f)
+#     # companies_list = dat.import_companies_list()
+#     i += 1
+#     print(f"number companies exported {i}, number of companies in db: {len(companies_list)}")
+#     # sleep(1)
 
 # for c in companies_list:
 #     pprint(c)

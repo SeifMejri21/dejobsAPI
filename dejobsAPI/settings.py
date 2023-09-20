@@ -11,23 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-
-
-class PROD_DEJOBS_DB_CREDENTIALS(object):
-    HOST = 'oregon-postgres.render.com'
-    NAME = 'dejobs_db'
-    USER = "seif"
-    PWD = "DU2ZJtBuGjg4dy5uaDDVkQLsFYHfG0HI"
-    PORT = '5432'
-
-
-class LOCAL_DEJOBS_DB_CREDENTIALS(object):
-    HOST = 'localhost'
-    NAME = 'dejobs_db'
-    USER = "seif"
-    PWD = "12345678"
-    PORT = '5432'
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,22 +77,28 @@ WSGI_APPLICATION = 'dejobsAPI.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+PROD_DB_NAME = config('PROD_DB_NAME')
+PROD_DB_USER = config('PROD_DB_USER')
+PROD_DB_PASSWORD = config('PROD_DB_PASSWORD')
+PROD_DB_HOST = config('PROD_DB_HOST')
+PROD_DB_PORT = config('PROD_DB_PORT')
+
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': LOCAL_DEJOBS_DB_CREDENTIALS.NAME,
-    #     'USER': LOCAL_DEJOBS_DB_CREDENTIALS.USER,
-    #     'PASSWORD': LOCAL_DEJOBS_DB_CREDENTIALS.PWD,
-    #     'HOST': LOCAL_DEJOBS_DB_CREDENTIALS.HOST,
-    #     'PORT': LOCAL_DEJOBS_DB_CREDENTIALS.PORT,
+    #     'NAME': config('PROD_DB_NAME'),
+    #     'USER': config('PROD_DB_USER'),
+    #     'PASSWORD': config('PROD_DB_PASSWORD'),
+    #     'HOST': config('PROD_DB_HOST'),
+    #     'PORT': config('PROD_DB_PORT'),
     # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': PROD_DEJOBS_DB_CREDENTIALS.NAME,
-        'USER': PROD_DEJOBS_DB_CREDENTIALS.USER,
-        'PASSWORD': PROD_DEJOBS_DB_CREDENTIALS.PWD,
-        'HOST': PROD_DEJOBS_DB_CREDENTIALS.HOST,
-        'PORT': PROD_DEJOBS_DB_CREDENTIALS.PORT,
+        'NAME': config('LOCAL_DB_NAME'),
+        'USER': config('LOCAL_DB_USER'),
+        'PASSWORD': config('LOCAL_DB_PASSWORD'),
+        'HOST': config('LOCAL_DB_HOST'),
+        'PORT': config('LOCAL_DB_PORT'),
     },
 
 }
