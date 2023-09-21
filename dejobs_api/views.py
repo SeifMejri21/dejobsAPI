@@ -1,3 +1,6 @@
+import json
+from pprint import pprint
+
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
@@ -24,7 +27,10 @@ def CompaniesApi(request, id=0):
             return JsonResponse("Failed to Add", safe=False)
 
     elif request.method == "PUT":
+        pprint(request)
+        # company_data = json.loads(request.data)
         company_data = JSONParser().parse(request)
+        pprint(company_data)
         company = Companies.objects.get(CompanyId=company_data['company_id'])
         companies_serializer = CompanySerializer(company, data=company_data)
         if companies_serializer.is_valid():

@@ -12,7 +12,7 @@ class DeJobsApiTester(object):
         """
         self.test_env = test_env
         self.local_base = "http://127.0.0.1:8000/"
-        self.prod_base = "http://127.0.0.1:8000/"
+        self.prod_base = "https://dejobs-backend.onrender.com/"
 
     @staticmethod
     def request_builder(request_type, url, data={}):
@@ -57,7 +57,7 @@ firms_info = read_json("firms_info", local=True)
 from pprint import pprint
 
 print("len(firms_info): ", len(firms_info))
-dat = DeJobsApiTester(test_env="local")
+dat = DeJobsApiTester(test_env="prod")
 # dat.export_companies_list(companies_list=firms_info)
 # dat.export_companies_list(firms_info)
 

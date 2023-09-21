@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import sys
 from pathlib import Path
+
 from decouple import config
+
+my_os = sys.platform
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,25 +88,29 @@ PROD_DB_PASSWORD = config('PROD_DB_PASSWORD')
 PROD_DB_HOST = config('PROD_DB_HOST')
 PROD_DB_PORT = config('PROD_DB_PORT')
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('PROD_DB_NAME'),
-        'USER': config('PROD_DB_USER'),
-        'PASSWORD': config('PROD_DB_PASSWORD'),
-        'HOST': config('PROD_DB_HOST'),
-        'PORT': config('PROD_DB_PORT'),
-    },
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': config('LOCAL_DB_NAME'),
-    #     'USER': config('LOCAL_DB_USER'),
-    #     'PASSWORD': config('LOCAL_DB_PASSWORD'),
-    #     'HOST': config('LOCAL_DB_HOST'),
-    #     'PORT': config('LOCAL_DB_PORT'),
-    # },
+if my_os == "win32":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('LOCAL_DB_NAME'),
+            'USER': config('LOCAL_DB_USER'),
+            'PASSWORD': config('LOCAL_DB_PASSWORD'),
+            'HOST': config('LOCAL_DB_HOST'),
+            'PORT': config('LOCAL_DB_PORT'),
+        },
 
-}
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('PROD_DB_NAME'),
+            'USER': config('PROD_DB_USER'),
+            'PASSWORD': config('PROD_DB_PASSWORD'),
+            'HOST': config('PROD_DB_HOST'),
+            'PORT': config('PROD_DB_PORT'),
+        },
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

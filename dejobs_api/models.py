@@ -12,6 +12,7 @@ class Companies(models.Model):
     careers_page = models.URLField(null=True, blank=True)
     hr_provider = models.CharField(max_length=255, null=True, blank=True)
     hr_page = models.CharField(max_length=255, null=True, blank=True)
+    hr_email = models.CharField(max_length=255, null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     logo = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
