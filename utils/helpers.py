@@ -41,3 +41,29 @@ def save_json(data, name, local=False, custom_path=''):
 def chunkify(big_list, chunk_size):
     chunks = [big_list[x:x + chunk_size] for x in range(0, len(big_list), chunk_size)]
     return chunks
+
+
+def sql_to_dict(sql_data, labels, type=1):
+    """
+    :param sql_data:
+    :param labels:
+    :param type: type 2 : [{'a': a, 'b':a}, ....], type 1 : {'a': [...], 'b':[...]}
+    :return:
+    """
+    if type == 2:
+        list_of_dict = []
+        for s in sql_data:
+            assert len(s) == len(labels)
+            dicti = {}
+            for el, l in zip(s, labels):
+                dicti[l] = el
+            list_of_dict.append(dicti)
+    else:
+        list_of_dict = {}
+        for l in labels:
+            list_of_dict[l] = []
+        for s in sql_data:
+            assert len(s) == len(labels)
+            for el, l in zip(s, labels):
+                list_of_dict[l].append(el)
+    return list_of_dict

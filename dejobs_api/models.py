@@ -25,11 +25,16 @@ class Companies(models.Model):
 
 class Jobs(models.Model):
     job_id = models.AutoField(primary_key=True, unique=True)
-    title = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
-    apply_url = models.URLField()
-    company_name = models.CharField(max_length=255)
-    company_symbol = models.CharField(max_length=255)
+    job_code = models.CharField(max_length=255, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    location = models.CharField(max_length=255,null=True, blank=True)
+    job_type = models.CharField(max_length=255,null=True, blank=True)
+    apply_url = models.URLField(null=True, blank=True)
+    company_name = models.CharField(max_length=255,null=True, blank=True)
+    company_symbol = models.CharField(max_length=255,null=True, blank=True)
+    job_description = models.TextField(null=True, blank=True)
+    salary_range = models.CharField(max_length=255,null=True, blank=True)
+
 
     class Meta:
         db_table = 'jobs'
