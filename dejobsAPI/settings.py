@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'dejobs_api.apps.DejobsApiConfig',
+    'ratelimit',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

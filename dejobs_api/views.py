@@ -1,17 +1,37 @@
-import json
 from pprint import pprint
 
-from django.shortcuts import render
+from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from django.http.response import JsonResponse
 
 from dejobs_api.models import Companies, Jobs
-from dejobs_api.serializers import CompanySerializer, JobSerializer
 from dejobs_api.repositorty.sql_utils import DbDataLoader
+from dejobs_api.serializers import CompanySerializer, JobSerializer
+# from django.http import HttpResponseForbidden
+# from ratelimit.decorators import ratelimit
+
+# decorators.py
+
+from django.http import HttpResponseForbidden
+
+
+# def restrict_to_specific_ip(view_func):
+#     def wrapper(request, *args, **kwargs):
+#         allowed_ip = '192.168.1.100'  # Replace with your allowed IP address
+#
+#         client_ip = request.META.get('REMOTE_ADDR')
+#
+#         if client_ip != allowed_ip:
+#             return HttpResponseForbidden("Access Forbidden")
+#
+#         return view_func(request, *args, **kwargs)
+#
+#     return wrapper
 
 
 @csrf_exempt
+# @ratelimit(ip=True, rate='1/s', method=['POST','GET', 'PUT DELETE'], block=True)
+# @restrict_to_specific_ip
 def CompaniesApi(request, id=0):
     if request.method == "GET":
         companies = Companies.objects.all()
@@ -82,6 +102,24 @@ def JobsApi(request, id=0):
 @csrf_exempt
 def AvailableJobsApi(request, id=0):
     if request.method == "GET":
+        page = int(request.GET.get('page'))
+        items = int(request.GET.get('items'))
         ddl = DbDataLoader(db='local')
-        available_jobs = ddl.get_available_jobs()
+        available_jobs = ddl.get_available_jobs(limit=items, offset=items * (page - 1))
         return JsonResponse(available_jobs, safe=False)
+
+
+@csrf_exempt
+def AvailableJobsApiCount(request):
+    if request.method == "GET":
+        ddl = DbDataLoader(db='local')
+        available_jobs = ddl.get_available_jobs_count()
+        return JsonResponse(available_jobs, safe=False)
+
+
+@csrf_exempt
+def AvailableJobsApiFilters(request):
+    if request.method == "GET":
+        ddl = DbDataLoader(db='local')
+        jobs_filters = ddl.get_jobs_filters()
+        return JsonResponse(jobs_filters, safe=False)

@@ -84,10 +84,40 @@ class DbDataLoader(object):
         self.sql_utils = SQLUtils()
         self.db = db
 
-    def get_available_jobs(self, ssh=False):
+    def get_available_jobs_count(self, ssh=False):
+        query = f"""SELECT count(*) from  jobs;"""
+        data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
+        print(data)
+        count = data[0][0]
+        return {'jobs_count': count}
+
+    def get_available_jobs(self, limit=100, offset=0, ssh=False):
         query = f"""SELECT jobs.title, jobs.location, jobs.apply_url, companies.name, companies.logo,companies.website,
-                    companies.symbol FROM jobs, companies  WHERE jobs.company_symbol = companies.symbol;"""
+                    companies.symbol FROM jobs, companies  WHERE jobs.company_symbol = companies.symbol
+                    Limit {limit} OFFSET {offset};"""
         data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
         data = sql_to_dict(data, ['title', 'location', 'apply_url', 'company_name', 'company_logo', 'company_website',
                                   'company_symbol'], type=2)
         return data
+
+    def get_available_jobs_filtered(self, limit=100, offset=0, ssh=False):
+        query = f"""SELECT jobs.title, jobs.location, jobs.apply_url, companies.name, companies.logo,companies.website,
+                    companies.symbol FROM jobs, companies  WHERE jobs.company_symbol = companies.symbol
+                    Limit {limit} OFFSET {offset};"""
+        data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
+        data = sql_to_dict(data, ['title', 'location', 'apply_url', 'company_name', 'company_logo', 'company_website',
+                                  'company_symbol'], type=2)
+        return data
+
+    def get_jobs_filters(self, ssh=False):
+        titles, companies_names, locations = [], [], []
+        query = f"""SELECT title, company_name, location FROM jobs;"""
+        data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
+        for d in data:
+            titles.append(d[0])
+            companies_names.append(d[1])
+            locations.append(d[2])
+        setted_titles = sorted(list(set(titles)))
+        setted_companies_names = sorted(list(set(companies_names)))
+        setted_locations = sorted(list(set(locations)))
+        return {"titles": setted_titles, "companies_names": setted_companies_names, "locations": setted_locations}
