@@ -14,7 +14,6 @@ from dejobs_api.serializers import CompanySerializer, JobSerializer
 
 from django.http import HttpResponseForbidden
 
-
 # def restrict_to_specific_ip(view_func):
 #     def wrapper(request, *args, **kwargs):
 #         allowed_ip = '192.168.1.100'  # Replace with your allowed IP address
@@ -27,11 +26,19 @@ from django.http import HttpResponseForbidden
 #         return view_func(request, *args, **kwargs)
 #
 #     return wrapper
+from utils.helpers import set_env
 
 
 @csrf_exempt
+def WelcomeApi(request, id=0):
+    if request.method == "GET":
+        response = {"message": "welcome to DeJobs API", "version": "1.0.0"}
+        return JsonResponse(response, safe=False)
+
+
 # @ratelimit(ip=True, rate='1/s', method=['POST','GET', 'PUT DELETE'], block=True)
 # @restrict_to_specific_ip
+@csrf_exempt
 def CompaniesApi(request, id=0):
     if request.method == "GET":
         companies = Companies.objects.all()
@@ -104,15 +111,22 @@ def AvailableJobsApi(request, id=0):
     if request.method == "GET":
         page = int(request.GET.get('page'))
         items = int(request.GET.get('items'))
-        ddl = DbDataLoader(db='local')
+        ddl = DbDataLoader(db=set_env())
         available_jobs = ddl.get_available_jobs(limit=items, offset=items * (page - 1))
+        return JsonResponse(available_jobs, safe=False)
+
+@csrf_exempt
+def AllAvailableJobsApi(request, id=0):
+    if request.method == "GET":
+        ddl = DbDataLoader(db=set_env())
+        available_jobs = ddl.get_all_available_jobs()
         return JsonResponse(available_jobs, safe=False)
 
 
 @csrf_exempt
 def AvailableJobsApiCount(request):
     if request.method == "GET":
-        ddl = DbDataLoader(db='local')
+        ddl = DbDataLoader(db=set_env())
         available_jobs = ddl.get_available_jobs_count()
         return JsonResponse(available_jobs, safe=False)
 
@@ -120,6 +134,6 @@ def AvailableJobsApiCount(request):
 @csrf_exempt
 def AvailableJobsApiFilters(request):
     if request.method == "GET":
-        ddl = DbDataLoader(db='local')
+        ddl = DbDataLoader(db=set_env())
         jobs_filters = ddl.get_jobs_filters()
         return JsonResponse(jobs_filters, safe=False)

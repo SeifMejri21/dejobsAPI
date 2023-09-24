@@ -1,4 +1,5 @@
 import json
+import sys
 
 
 def read_json(file_name, local=False, custom_path=''):
@@ -67,3 +68,11 @@ def sql_to_dict(sql_data, labels, type=1):
             for el, l in zip(s, labels):
                 list_of_dict[l].append(el)
     return list_of_dict
+
+
+def set_env():
+    if sys.platform == 'win32':
+        env = 'local'
+    else:
+        env = 'prod'
+    return env

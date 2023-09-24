@@ -85,7 +85,7 @@ class DbDataLoader(object):
         self.db = db
 
     def get_available_jobs_count(self, ssh=False):
-        query = f"""SELECT count(*) from  jobs;"""
+        query = f"""SELECT count(*)::INTEGER as ct from  jobs;"""
         data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
         print(data)
         count = data[0][0]
@@ -95,6 +95,14 @@ class DbDataLoader(object):
         query = f"""SELECT jobs.title, jobs.location, jobs.apply_url, companies.name, companies.logo,companies.website,
                     companies.symbol FROM jobs, companies  WHERE jobs.company_symbol = companies.symbol
                     Limit {limit} OFFSET {offset};"""
+        data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
+        data = sql_to_dict(data, ['title', 'location', 'apply_url', 'company_name', 'company_logo', 'company_website',
+                                  'company_symbol'], type=2)
+        return data
+
+    def get_all_available_jobs(self, limit=100, offset=0, ssh=False):
+        query = f"""SELECT jobs.title, jobs.location, jobs.apply_url, companies.name, companies.logo,companies.website,
+                    companies.symbol FROM jobs, companies  WHERE jobs.company_symbol = companies.symbol ;"""
         data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
         data = sql_to_dict(data, ['title', 'location', 'apply_url', 'company_name', 'company_logo', 'company_website',
                                   'company_symbol'], type=2)
