@@ -47,9 +47,9 @@ class SQLUtils(object):
         conn = None
         try:
             if ssh:
-                conn = self.create_connection_ssh(db='local')
+                conn = self.create_connection_ssh(db=db)
             else:
-                conn = self.create_connection_non_ssh(db='local')
+                conn = self.create_connection_non_ssh(db=db)
         except Exception as e:
             print('create_connection ERROR ', e)
         return conn
@@ -100,7 +100,7 @@ class DbDataLoader(object):
                                   'company_symbol'], type=2)
         return data
 
-    def get_all_available_jobs(self, limit=100, offset=0, ssh=False):
+    def get_all_available_jobs(self, ssh=False):
         query = f"""SELECT jobs.title, jobs.location, jobs.apply_url, companies.name, companies.logo,companies.website,
                     companies.symbol FROM jobs, companies  WHERE jobs.company_symbol = companies.symbol ;"""
         data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
