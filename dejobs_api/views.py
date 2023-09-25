@@ -75,12 +75,12 @@ def CompaniesApi(request, id=0):
 
 @csrf_exempt
 def JobsApi(request, id=0):
-    if request.method == "GET":
-        jobs = Jobs.objects.all()
-        jobs_serializer = JobSerializer(jobs, many=True)
-        return JsonResponse(jobs_serializer.data, safe=False)
+    # if request.method == "GET":
+    #     jobs = Jobs.objects.all()
+    #     jobs_serializer = JobSerializer(jobs, many=True)
+    #     return JsonResponse(jobs_serializer.data, safe=False)
 
-    elif request.method == "POST":
+    if request.method == "POST":
         job_data = JSONParser().parse(request)
         jobs_serializer = JobSerializer(data=job_data)
         if jobs_serializer.is_valid():
