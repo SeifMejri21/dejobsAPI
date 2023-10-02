@@ -108,6 +108,17 @@ class DbDataLoader(object):
                                   'company_symbol'], type=2)
         return data
 
+    def get_careers_page_for_not_parsed(self, ssh=False):
+        query = f"""SELECT companies.NAME,companies.symbol,companies.logo, companies.website,
+                    companies.careers_page, companies.hr_page, companies.hr_email
+                    FROM companies
+                    WHERE companies.hr_provider NOT in ('greenhouse', 'breezy', 'lever', 'ashbyhq', 'workable',
+                     'bamboohr', 'applytojob', 'polymer', 'smartrecruiters', '-') and companies.hr_provider IS NOT NULL;"""
+        data = self.sql_utils.execute_query(query=query, db=self.db, ssh=ssh)
+        data = sql_to_dict(data, ['name', 'symbol', 'logo', 'website', 'careers_page', 'hr_page', 'hr_email'], type=2)
+        return data
+
+
     def get_available_jobs_filtered(self, limit=100, offset=0, ssh=False):
         query = f"""SELECT jobs.title, jobs.location, jobs.apply_url, companies.name, companies.logo,companies.website,
                     companies.symbol FROM jobs, companies  WHERE jobs.company_symbol = companies.symbol
